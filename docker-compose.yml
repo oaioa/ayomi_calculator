@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  fastapi:
+    build:
+      context: .
+      dockerfile: dockerfiles/server
+    container_name: fastapi_app
+    ports:
+      - "8000:80"
+    depends_on:
+      - mongodb
+    environment:
+      - MONGO_URL=mongodb://admin:adminpasss@mongodb:27017/calculator_database?authSource=admin
+
+  mongodb:
+    image: mongo
+    container_name: mongodb
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: adminpasss
+      MONGO_INITDB_DATABASE: calculator_database
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+volumes:
+  mongo-data:
